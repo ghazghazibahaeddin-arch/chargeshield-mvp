@@ -1,7 +1,7 @@
 import { openai } from '@/lib/openai'
 
 export async function POST(req: Request) {
-  const { reason, amount } = await req.json()
+  const body = await req.json()
 
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
@@ -9,12 +9,10 @@ export async function POST(req: Request) {
       {
         role: 'user',
         content: `
-Write a professional chargeback dispute response.
+Write a strong chargeback dispute.
 
-Reason: ${reason}
-Amount: ${amount}
-
-Make it strong and persuasive.
+Reason: ${body.reason}
+Amount: ${body.amount}
 `,
       },
     ],
