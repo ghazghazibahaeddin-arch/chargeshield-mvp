@@ -1,0 +1,11 @@
+body {
+  background: #0f172a;
+  color: white;
+}
+
+button {
+  background: #22c55e;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
