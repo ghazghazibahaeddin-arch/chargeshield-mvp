@@ -1,7 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import { decide } from '@/src/automation/decision'
-import { submitEvidence } from '../submit/route'
-import { refundPayment } from '../submit/route'
+import { decisionEngine } from '@/src/engine/decision'
 
 export async function GET() {
   const { data: disputes } = await supabase
@@ -10,52 +8,20 @@ export async function GET() {
     .eq('status', 'pending')
 
   for (const dispute of disputes || []) {
-    const action = decide(dispute)
+    const result = decisionEngine(dispute)
 
-    if (action === 'refund') {
-      await refundPayment(dispute.charge_id)
-      await supabase.from('disputes').update({
-        status: 'refunded'
-      }).eq('id', dispute.id)
-    }
+    await supabase.from('disputes').update({
+      decision: result.action,
+      money_impact: result.impact,
+      status: 'processed'
+    }).eq('id', dispute.id)
 
-    if (action === 'submit') {
-      await submitEvidence(dispute.charge_id)
-      await supabase.from('disputes').update({
-        status: 'submitted'
-      }).eq('id', dispute.id)
-    }
+    // تحديث المستخدم
+    await supabase.rpc('update_user_money', {
+      user_id_input: dispute.user_id,
+      amount_input: result.impact
+    })
   }
 
   return Response.json({ ok: true })
-}import { supabase } from '@/lib/supabase'
-import { decide } from '@/src/automation/decision'
-import { submitEvidence } from '../submit/route'
-import { refundPayment } from '../submit/route'
-
-export async function GET() {
-  const { data: disputes } = await supabase
-    .from('disputes')
-    .select('*')
-    .eq('status', 'pending')
-
-  for (const dispute of disputes || []) {
-    const action = decide(dispute)
-
-    if (action === 'refund') {
-      await refundPayment(dispute.charge_id)
-      await supabase.from('disputes').update({
-        status: 'refunded'
-      }).eq('id', dispute.id)
-    }
-
-    if (action === 'submit') {
-      await submitEvidence(dispute.charge_id)
-      await supabase.from('disputes').update({
-        status: 'submitted'
-      }).eq('id', dispute.id)
-    }
-  }
-
-  return Response.json({ ok: true })
-    }
+}
