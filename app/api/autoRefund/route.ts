@@ -1,26 +1,39 @@
 import { supabase } from '@/lib/supabase'
-import { predict } from '@/src/ml/predict'
 
-export async function POST() {
-  // جلب النزاعات المعلقة
+export async function runAutoRefund() {
   const { data: disputes } = await supabase
     .from('disputes')
     .select('*')
     .eq('status', 'pending')
 
-  if (!disputes) return new Response(JSON.stringify({ ok: false }))
+  for (const dispute of disputes || []) {
+    if (dispute.riskScore > 80) {
 
-  for (const d of disputes) {
-    // توقع الفوز باستخدام ML
-    const winProb = await predict(null, d) // استخدم النموذج المدرب
+      console.log(`Refund triggered for ${dispute.email}`)
 
-    if (winProb < 0.5) {
-      // إجراء استرداد تلقائي
-      await supabase.from('disputes').update({ status: 'refunded' }).eq('id', d.id)
-      // هنا يمكن ربط API دفع Gumroad لإرجاع الأموال
-      console.log(`Refunded dispute ${d.id} due to low win probability`)
+      // تحديث الحالة فقط (لأن Gumroad API محدود)
+      await supabase.from('disputes')
+        .update({ status: 'refunded' })
+        .eq('id', dispute.id)
     }
   }
+}import { supabase } from '@/lib/supabase'
 
-  return new Response(JSON.stringify({ ok: true }))
+export async function runAutoRefund() {
+  const { data: disputes } = await supabase
+    .from('disputes')
+    .select('*')
+    .eq('status', 'pending')
+
+  for (const dispute of disputes || []) {
+    if (dispute.riskScore > 80) {
+
+      console.log(`Refund triggered for ${dispute.email}`)
+
+      // تحديث الحالة فقط (لأن Gumroad API محدود)
+      await supabase.from('disputes')
+        .update({ status: 'refunded' })
+        .eq('id', dispute.id)
+    }
   }
+}
