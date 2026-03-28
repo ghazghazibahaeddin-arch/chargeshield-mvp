@@ -1,12 +1,20 @@
+import { supabase } from '@/lib/supabase'
+
 export async function POST(req: Request) {
   const body = await req.json()
 
-  if (body.sale) {
-    const email = body.sale.email
+  const email = body.sale.email
+  const price = Number(body.sale.price)
 
-    // هنا تحفظ المستخدم
-    console.log("User paid:", email)
-  }
+  let plan = 'starter'
 
-  return Response.json({ ok: true })
+  if (price >= 299) plan = 'growth'
+  if (price >= 799) plan = 'scale'
+
+  await supabase.from('users').upsert({
+    email,
+    plan,
+  })
+
+  return Response.json({ success: true })
 }
