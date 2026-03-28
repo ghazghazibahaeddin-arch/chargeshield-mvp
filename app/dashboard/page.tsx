@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx
 import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import MerchantCard from '@/components/MerchantCard'
@@ -13,12 +12,17 @@ export default function DashboardPage() {
 
       const merchantsWithScore = data.map(user => ({
         ...user,
-        healthScore: 100 - ((user.dispute_ratio || 0) * 50 + (user.refund_rate || 0) * 30 + (user.fraud_trend || 0) * 20),
+        healthScore:
+          100 -
+          ((user.dispute_ratio || 0) * 50 +
+            (user.refund_rate || 0) * 30 +
+            (user.fraud_trend || 0) * 20),
         disputeRatio: user.dispute_ratio || 0,
         refundRate: user.refund_rate || 0,
         fraudTrend: user.fraud_trend || 0,
         autoRefundStatus: user.status || 'Pending',
         winProbability: user.win_probability || 0,
+        preDisputeAlert: user.pre_dispute_alert || false,
       }))
 
       setMerchants(merchantsWithScore)
@@ -37,4 +41,4 @@ export default function DashboardPage() {
       </div>
     </div>
   )
-}
+    }
