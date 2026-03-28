@@ -1,3 +1,4 @@
+// components/MerchantCard.tsx
 import React from 'react'
 
 interface MerchantCardProps {
@@ -7,6 +8,8 @@ interface MerchantCardProps {
     disputeRatio: number
     refundRate: number
     fraudTrend: number
+    autoRefundStatus: string
+    winProbability: number
   }
 }
 
@@ -18,6 +21,8 @@ const MerchantCard: React.FC<MerchantCardProps> = ({ merchant }) => {
       <p>Dispute Ratio: {merchant.disputeRatio}</p>
       <p>Refund Rate: {merchant.refundRate}</p>
       <p>Fraud Trend: {merchant.fraudTrend}</p>
+      <p>Auto Refund Status: {merchant.autoRefundStatus}</p>
+      <p>Win Probability: {merchant.winProbability}</p>
     </div>
   )
 }
