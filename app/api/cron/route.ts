@@ -1,6 +1,4 @@
 export async function GET() {
-  console.log("Running background jobs...")
-
-  // مثال: تحديث حالات disputes
+  console.log("Running jobs...")
   return Response.json({ ok: true })
 }
