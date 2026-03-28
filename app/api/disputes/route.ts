@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabase'
 import { fraudScore } from '@/src/fraud/score'
 import { analyze } from '@/src/ai/rootCause'
 
