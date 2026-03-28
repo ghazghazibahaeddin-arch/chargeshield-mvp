@@ -1,8 +1,12 @@
-export default function RootLayout({ children }) {
+import './globals.css'
+import Navbar from '@/components/Navbar'
+
+export default function RootLayout({ children }: any) {
   return (
-    <html lang="en">
-      <body style={{ fontFamily: 'sans-serif', padding: 20 }}>
-        {children}
+    <html>
+      <body>
+        <Navbar />
+        <div className="p-6">{children}</div>
       </body>
     </html>
   )
