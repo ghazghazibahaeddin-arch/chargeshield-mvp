@@ -1,21 +1,23 @@
 import { supabase } from '@/lib/supabase'
+import { calculateRisk } from '@/src/engine/risk'
 
 export async function POST(req: Request) {
   const body = await req.json()
 
   const email = body.sale.email
-  const price = body.sale.price
+  const amount = body.sale.price
 
-  // تعيين الخطة حسب السعر
-  let plan = 'starter'
-  if (price >= 299) plan = 'growth'
-  if (price >= 799) plan = 'scale'
-
-  // حفظ أو تحديث المستخدم في Supabase
-  await supabase.from('users').upsert({
+  const riskScore = calculateRisk({
     email,
-    plan,
-    plan_price: price
+    amount,
+    hasTracking: false
+  })
+
+  await supabase.from('disputes').insert({
+    email,
+    amount,
+    riskScore,
+    status: 'pending'
   })
 
   return Response.json({ ok: true })
