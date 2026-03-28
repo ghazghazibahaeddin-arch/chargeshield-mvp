@@ -1,18 +1,21 @@
+// i18n.ts
 export const translations = {
   en: {
     dashboard: "Dashboard",
     dispute: "Dispute",
     reason: "Reason",
     amount: "Amount",
+    submit: "Submit",
+    refund: "Refund",
+    healthScore: "Health Score",
+    disputeRatio: "Dispute Ratio",
+    refundRate: "Refund Rate",
+    fraudTrend: "Fraud Trend",
+    autoRefundStatus: "Auto Refund Status",
+    winProbability: "Win Probability",
   },
-  ar: {
-    dashboard: "لوحة التحكم",
-    dispute: "نزاع",
-    reason: "السبب",
-    amount: "المبلغ",
-  }
 }
 
-export function t(lang: 'en'|'ar', key: string) {
-  return translations[lang][key] || key
+export function t(key: string) {
+  return translations.en[key] || key
 }
