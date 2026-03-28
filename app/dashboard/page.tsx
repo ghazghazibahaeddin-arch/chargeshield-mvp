@@ -4,41 +4,36 @@ import { useEffect, useState } from 'react'
 
 export default function Dashboard() {
   const [data, setData] = useState([])
-  const [result, setResult] = useState('')
+  const [stats, setStats] = useState({})
 
   useEffect(() => {
     fetch('/api/disputes')
       .then(res => res.json())
-      .then(setData)
-  }, [])
+      .then(d => {
+        setData(d)
 
-  const generate = async (d: any) => {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      body: JSON.stringify(d),
-    })
-    const json = await res.json()
-    setResult(json.text)
-  }
+        const total = d.length
+        const won = d.filter((x:any)=>x.status==='won').length
+
+        setStats({
+          winRate: total ? (won/total)*100 : 0,
+          recovered: d.reduce((a:any,x:any)=>a+x.amount,0)
+        })
+      })
+  }, [])
 
   return (
     <div>
       <h1>Dashboard</h1>
 
-      {data.map((d: any) => (
-        <div key={d.id} style={{ border: '1px solid #ccc', padding: 10 }}>
-          <p>{d.reason}</p>
-          <p>${d.amount}</p>
-          <button onClick={() => generate(d)}>Generate</button>
+      <p>Win Rate: {stats.winRate}%</p>
+      <p>Recovered: ${stats.recovered}</p>
+
+      {data.map((d:any)=>(
+        <div key={d.id}>
+          {d.reason} - ${d.amount}
         </div>
       ))}
-
-      {result && (
-        <div>
-          <h2>Generated Response</h2>
-          <pre>{result}</pre>
-        </div>
-      )}
     </div>
   )
-        }
+}
