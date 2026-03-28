@@ -1,20 +1,29 @@
-export default function Dashboard({ user }) {
+export default function Home() {
   return (
-    <div className="p-6 space-y-4">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 text-center">
 
-      <div className="bg-green-900 p-6 rounded-xl">
-        <h2 className="text-xl font-bold">Money Saved</h2>
-        <p>${user.money_saved}</p>
+      <h1 className="text-4xl font-bold mb-4">
+        Stop Losing Money on Gumroad
+      </h1>
+
+      <p className="text-gray-400 mb-6">
+        Automatically detect risky buyers and protect your revenue.
+      </p>
+
+      <div className="flex gap-4">
+        <a href="https://radhiayt.gumroad.com/l/bcnma" className="bg-green-600 px-6 py-3 rounded-xl">
+          Start $99
+        </a>
+
+        <a href="/dashboard" className="bg-gray-800 px-6 py-3 rounded-xl">
+          Dashboard
+        </a>
       </div>
 
-      <div className="bg-yellow-900 p-6 rounded-xl">
-        <h2>Risk Level</h2>
-        <p>{user.risk_level}</p>
-      </div>
-
-      <div className="bg-red-900 p-6 rounded-xl">
-        <h2>Refund Rate</h2>
-        <p>{user.refund_rate}%</p>
+      <div className="mt-10 text-gray-400">
+        <p>✔ Reduce refunds</p>
+        <p>✔ Detect fraud</p>
+        <p>✔ Save money automatically</p>
       </div>
 
     </div>
