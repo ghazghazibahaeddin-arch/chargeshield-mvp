@@ -1,11 +1,10 @@
 export function analyze(dispute: any) {
-  if (dispute.reason === "fraudulent") {
-    return "Possible stolen card usage"
-  }
+  const reasons: string[] = []
 
-  if (dispute.reason === "product_not_received") {
-    return "Shipping issue"
-  }
+  if (dispute.shipping_delay) reasons.push("Shipping delay")
+  if (dispute.misleading_description) reasons.push("Misleading product description")
+  if (dispute.refund_policy_issue) reasons.push("Refund policy confusion")
+  if (dispute.customer_support_delay) reasons.push("Customer support delay")
 
-  return "Unknown"
+  return reasons.join(", ") || "Unknown cause"
 }
