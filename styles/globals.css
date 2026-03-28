@@ -1,11 +1,7 @@
-body {
-  background: #0f172a;
-  color: white;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-button {
-  background: #22c55e;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
+body {
+  @apply bg-gray-950 text-white;
 }
